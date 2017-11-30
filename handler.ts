@@ -6,6 +6,7 @@ import * as Alexa from 'alexa-sdk'
 // import './lib/api/listTeams'
 import {startNewBracket as startBracket} from './lib/api/startNewBracket'
 // import './lib/api/submitMatchScores'
+import * as types from "./lib/types"
 
 const APP_ID = 'amzn1.ask.skill.37443e25-6717-47d9-971c-a64c1742422c'
 const HELP_MESSAGE = 'This is a temp help message'
@@ -38,7 +39,7 @@ const alexaHandlers = {
     console.log('teams: ', teams)
     console.log('bracket type: ', bracketType)
 
-    await startBracket(teams, bracketType)
+    await startBracket(["fred", "bob", "jill"], types.BracketType.SingleElimination)
     this.response.speak(resp)
     this.emit(':responseReady')
   },
