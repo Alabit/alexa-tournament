@@ -3,7 +3,7 @@ import * as t from "../types"
 
 
 // returns null if there are no more matches or there is no active bracket
-export function describeNextMatch(): t.MatchInfo | null {
+export async function describeNextMatch(): Promise<t.MatchInfo | null> {
   // TODO
   return {
     id: 1,

@@ -1,8 +1,11 @@
 import * as t from "../types"
+import {DynamoDB} from "aws-sdk"
 
 
 
-export function describeBracketStatus(): t.BracketStatus | null {
+export async function describeBracketStatus(): Promise<t.BracketStatus | null> {
+  const db = new DynamoDB.DocumentClient()
+
   // TODO
   // NOTE teamRankings are organized the way they are so that ties can be expressed
   return {

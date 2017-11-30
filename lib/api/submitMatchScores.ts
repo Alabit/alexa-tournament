@@ -2,6 +2,6 @@ import * as t from "../types"
 
 
 
-export function submitMatchScores(teamOneScore: number, teamTwoScore: number): void {
+export async function submitMatchScores(teamOneScore: number, teamTwoScore: number): Promise<void> {
   // TODO
 }
