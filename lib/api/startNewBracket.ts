@@ -137,7 +137,7 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
           const entry: {
             tmpHash: string
             id: number
-            status: "BLOCKED" | "PENDING"
+            matchStatus: "BLOCKED" | "PENDING"
             winnerAdvancesTo?: {
               match: number
               slot: "ONE" | "TWO"
@@ -151,18 +151,18 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
           } = {
             tmpHash: TmpHash,
             id: node.id,
-            status: "PENDING",
+            matchStatus: "PENDING",
             teamOne: null,
             teamTwo: null
           }
 
           if (node.teamOne.type === "MATCH") {
-            entry.status = "BLOCKED"
+            entry.matchStatus = "BLOCKED"
           } else {
             entry.teamOne = node.teamOne.team
           }
           if (node.teamTwo.type === "MATCH") {
-            entry.status = "BLOCKED"
+            entry.matchStatus = "BLOCKED"
           } else {
             entry.teamTwo = node.teamTwo.team
           }

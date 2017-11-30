@@ -26,8 +26,11 @@ export async function submitMatchScores(teamOneScore: number, teamTwoScore: numb
       tmpHash: TmpHash,
       id: nextMatchID
     },
-    ConditionExpression: "status = :oldStatus",
-    UpdateExpression: "SET status = :newStatus, teamOneScore = :teamOneScore, teamTwoScore = :teamTwoScore, winner = :winner",
+    ConditionExpression: "matchStatus = :oldStatus",
+    UpdateExpression: "SET #matchStatus = :newStatus, teamOneScore = :teamOneScore, teamTwoScore = :teamTwoScore, winner = :winner",
+    ExpressionAttributeNames: {
+      "#matchStatus": 'matchStatus'
+    },
     ExpressionAttributeValues: {
       ":newStatus": "COMPLETE",
       ":oldStatus": "PENDING",
@@ -82,7 +85,7 @@ async function advanceTeam(db: DynamoDB.DocumentClient, team: string, match: num
         tmpHash: TmpHash,
         id: match
       },
-      UpdateExpression: "SET status = :status",
+      UpdateExpression: "SET matchStatus = :status",
       ExpressionAttributeValues: {
         ":status": "PENDING"
       }

@@ -17,7 +17,7 @@ export async function getTeamStats(team: string): Promise<t.TeamStats | null> {
   const res = await db.query({
     TableName: Tables.BracketMatches,
     KeyConditionExpression: "tmpHash = :tmpHash",
-    FilterExpression: "status = :status AND (teamOne = :team OR teamTwo = :team)",
+    FilterExpression: "matchStatus = :status AND (teamOne = :team OR teamTwo = :team)",
     ExpressionAttributeValues: {
       ":status": "COMPLETE",
       ":team": team,

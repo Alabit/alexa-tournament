@@ -5,7 +5,7 @@ import * as Alexa from 'alexa-sdk'
 // import './lib/api/getTeamStats'
 // import './lib/api/listTeams'
 import {startNewBracket as startBracket} from './lib/api/startNewBracket'
-// import './lib/api/submitMatchScores'
+import {submitMatchScores as submitScores} from './lib/api/submitMatchScores'
 import * as types from "./lib/types"
 
 const APP_ID = 'amzn1.ask.skill.37443e25-6717-47d9-971c-a64c1742422c'
@@ -33,13 +33,13 @@ const alexaHandlers = {
 
     console.log(this.event.request.intent.slots)
 
-    let teams = this.event.request.intent.slots.numOfTeams.value
-    let bracketType = this.event.request.intent.slots.bracketType.value
+    let teams: string[] = await generateTeamName(this.event.request.intent.slots.numOfTeams.value)
+    let bracketType: string = this.event.request.intent.slots.bracketType.value
 
     console.log('teams: ', teams)
     console.log('bracket type: ', bracketType)
 
-    await startBracket(["fred", "bob", "jill"], types.BracketType.SingleElimination)
+    await startBracket(teams, types.BracketType.SingleElimination)
     this.response.speak(resp)
     this.emit(':responseReady')
   },
@@ -68,9 +68,15 @@ const alexaHandlers = {
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
   },
-  'submitMatchScores': function () {
-    const tmp_msg = 'we would submit a score if we worked.'
-    this.response.speak(tmp_msg)
+  'submitMatchScores': async function () {
+    let teamOneScore = this.event.request.intent.slots.teamOneScore.value
+    let teamTwoScore = this.event.request.intent.slots.teamTwoScore.value
+
+    await submitScores(teamOneScore, teamTwoScore)
+
+    let message = 'Score for this match has been submited'
+
+    this.response.speak(message)
     this.emit(':responseReady')
   },
   'AMAZON.HelpIntent': function () {
@@ -88,4 +94,14 @@ const alexaHandlers = {
      this.response.speak(STOP_MESSAGE);
      this.emit(':responseReady');
    },
+}
+
+
+
+async function generateTeamName(numOfTeams: int) {
+  let teamArray = []
+  for (let i = 0; i < numOfTeams; i++) {
+    teamArray.push('team-' + String(i+1))
+  }
+  return teamArray
 }
