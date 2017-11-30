@@ -1,16 +1,34 @@
+import {DynamoDB} from "aws-sdk"
+import {Tables, TmpHash} from "../config"
 import * as t from "../types"
 
 
 
-// returns null if the id is invalid or there is no active bracket
+/*
+  Retrieve details about the given match.
+  Returns null if the ID is invalid or there is no active bracket.
+*/
 export async function describeMatch(id: number): Promise<t.MatchInfo | null> {
-  // TODO
+  const db = new DynamoDB.DocumentClient()
+
+  const res = await db.get({
+    TableName: Tables.BracketMatches,
+    Key: {
+      tmpHash: TmpHash,
+      id: id
+    }
+  }).promise()
+
+  if (!res.Item) {
+    return null
+  }
+
   return {
-    id: 1,
-    status: t.CompletionStatus.Incomplete,
-    teamOne: "bob",
-    teamTwo: "fred",
-    teamOneScore: 0,
-    teamTwoScore: 0
+    id: res.Item.id,
+    status: res.Item.status,
+    teamOne: res.Item.teamOne || "<TBD>",
+    teamTwo: res.Item.teamTwo || "<TBD>",
+    teamOneScore: res.Item.teamOneScore || 0,
+    teamTwoScore: res.Item.teamTwoScore || 0
   }
 }

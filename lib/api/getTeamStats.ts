@@ -1,3 +1,5 @@
+import {DynamoDB} from "aws-sdk"
+import {Tables} from "../config"
 import * as t from "../types"
 
 
