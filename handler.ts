@@ -1,6 +1,14 @@
 import * as Alexa from 'alexa-sdk'
+// import './lib/api/describeMatch'
+// import './lib/api/describeBracketStatus'
+// import './lib/api/describeNextMatch'
+// import './lib/api/getTeamStats'
+// import './lib/api/listTeams'
+import {startNewBracket as startBracket} from './lib/api/startNewBracket'
+// import './lib/api/submitMatchScores'
+import * as types from "./lib/types"
 
-const APP_ID = ''
+const APP_ID = 'amzn1.ask.skill.37443e25-6717-47d9-971c-a64c1742422c'
 const HELP_MESSAGE = 'This is a temp help message'
 const HELP_REPROMPT = 'Reprompt for Help'
 const STOP_MESSAGE = 'We are stopping'
@@ -17,37 +25,50 @@ export async function main(event: any, context: any, callback: any) {
 
 
 const alexaHandlers = {
-  'startNewBracket': () => {
-    const tmp_msg = 'we would create a new bracket if we worked.'
-    this.response.speak(tmp_msg)
+  'LaunchRequest': function () {
+    this.emit('startNewBracket')
+  },
+  'startNewBracket': async function () {
+    const resp = 'New bracket has been created.'
+
+    console.log(this.event.request.intent.slots)
+
+    let teams = this.event.request.intent.slots.numOfTeams.value
+    let bracketType = this.event.request.intent.slots.bracketType.value
+
+    console.log('teams: ', teams)
+    console.log('bracket type: ', bracketType)
+
+    await startBracket(["fred", "bob", "jill"], types.BracketType.SingleElimination)
+    this.response.speak(resp)
     this.emit(':responseReady')
   },
-  'describeBracketStatus': () => {
+  'describeBracketStatus': function () {
     const tmp_msg = 'we would describe a bracket if we worked.'
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
   },
-  'describeMatch': () => {
+  'describeMatch': function () {
     const tmp_msg = 'we would describe a match if we worked.'
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
   },
-  'describeNextMatch': () => {
+  'describeNextMatch': function () {
     const tmp_msg = 'we would describe the next match if we worked.'
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
   },
-  'getTeamStats': () => {
+  'getTeamStats': function () {
     const tmp_msg = 'we would describe team stats if we worked.'
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
   },
-  'listTeams': () => {
+  'listTeams': function () {
     const tmp_msg = 'we would describe the team list if we worked.'
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
   },
-  'submitMatchScores': () => {
+  'submitMatchScores': function () {
     const tmp_msg = 'we would submit a score if we worked.'
     this.response.speak(tmp_msg)
     this.emit(':responseReady')
