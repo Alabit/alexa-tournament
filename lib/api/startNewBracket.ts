@@ -56,7 +56,7 @@ async function clearTable(table: string, db: DynamoDB.DocumentClient, itemToKey:
 
     await db.batchWrite({
       RequestItems: batch
-    })
+    }).promise()
   }
 }
 
@@ -113,7 +113,6 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
       }
 
       const bracket = buildBracket(teams)
-
 
       const queue = [bracket]
       for (let i = 0; i < queue.length; i++) {
@@ -213,7 +212,7 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
 
   await db.batchWrite({
     RequestItems: batch
-  })
+  }).promise()
 }
 
 async function createTeams(teams: string[], db: DynamoDB.DocumentClient): Promise<void> {
@@ -236,5 +235,5 @@ async function createTeams(teams: string[], db: DynamoDB.DocumentClient): Promis
 
   await db.batchWrite({
     RequestItems: batch
-  })
+  }).promise()
 }
