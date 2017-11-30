@@ -1,6 +1,6 @@
 export namespace Tables {
 
-  export const Teams = ""
-  export const BracketMatches = ""
+  export const Teams = "bracketManager-teams"
+  export const BracketMatches = "bracketManager-bracketMatches"
 
 }
