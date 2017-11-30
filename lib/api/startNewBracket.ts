@@ -60,9 +60,9 @@ async function clearTable(table: string, db: DynamoDB.DocumentClient, itemToKey:
 }
 
 async function createBracket(type: t.BracketType, db: DynamoDB.DocumentClient): Promise<void> {
-    let teams = await db.scan({
-      TableName: Tables.Teams
-    }).promise()
+  const teams = ((await db.scan({
+    TableName: Tables.Teams
+  }).promise()).Items || []).map((item) => item.name)
 
   if (teams.length === 0) {
     throw new Error("Unable to make a bracket with zero teams")
