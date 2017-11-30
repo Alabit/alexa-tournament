@@ -25,7 +25,7 @@ export async function describeMatch(id: number): Promise<t.MatchInfo | null> {
 
   return {
     id: res.Item.id,
-    status: res.Item.status,
+    status: res.Item.matchStatus,
     teamOne: res.Item.teamOne || "<TBD>",
     teamTwo: res.Item.teamTwo || "<TBD>",
     teamOneScore: res.Item.teamOneScore || 0,
