@@ -7,7 +7,7 @@ import * as t from "../types"
 /*
   Clears out the database (for now), then creates initial data for a new bracket.
 */
-export async function startNewBracket(teams: string[], type: t.BracketType): Promise<void> {
+export async function startNewBracket(type: t.BracketType): Promise<void> {
   const db = new DynamoDB.DocumentClient()
 
   await Promise.all([
@@ -25,8 +25,7 @@ export async function startNewBracket(teams: string[], type: t.BracketType): Pro
   ])
 
   await Promise.all([
-    createBracket(type, teams, db),
-    createTeams(teams, db)
+    createBracket(type, db)
   ])
 }
 
@@ -60,7 +59,11 @@ async function clearTable(table: string, db: DynamoDB.DocumentClient, itemToKey:
   }
 }
 
-async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.DocumentClient): Promise<void> {
+async function createBracket(type: t.BracketType, db: DynamoDB.DocumentClient): Promise<void> {
+    let teams = await db.scan({
+      TableName: Tables.Teams
+    }).promise()
+
   if (teams.length === 0) {
     throw new Error("Unable to make a bracket with zero teams")
   }
@@ -206,29 +209,6 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
     return {
       PutRequest: {
         Item: match
-      }
-    }
-  })
-
-  await db.batchWrite({
-    RequestItems: batch
-  }).promise()
-}
-
-async function createTeams(teams: string[], db: DynamoDB.DocumentClient): Promise<void> {
-  const batch: {
-    [table: string]: Array<{
-      PutRequest: {
-        Item: {}
-      }
-    }>
-  } = {}
-  batch[Tables.Teams] = teams.map((team) => {
-    return {
-      PutRequest: {
-        Item: {
-          name: team
-        }
       }
     }
   })
