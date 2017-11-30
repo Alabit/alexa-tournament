@@ -1,0 +1,7 @@
+{
+  "name": "alexa-tournament",
+  "version": "0.0.0",
+  "dependencies": {
+    "aws-sdk": "^2.160.0"
+  }
+}
