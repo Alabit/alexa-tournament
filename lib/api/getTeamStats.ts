@@ -2,7 +2,7 @@ import * as t from "../types"
 
 
 
-export function getTeamStats(team: string): t.TeamStats {
+export function getTeamStats(team: string): t.TeamStats | null {
   // TODO
   return {
     wins: 1,
