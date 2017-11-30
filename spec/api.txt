@@ -1,0 +1,40 @@
+enum BracketType {
+  SingleElimination
+}
+
+enum CompletionStatus {
+  Complete,
+  Incomplete
+}
+
+interface BracketStatus {
+  status: CompletionStatus
+  winner: string
+  teamRankings: {
+    [team: string]: number
+  }
+}
+
+interface MatchInfo {
+  id: number
+  status: CompletionStatus
+  teamOne: string
+  teamTwo: string
+  teamOneScore: number
+  teamTwoScore: number
+}
+
+interface TeamStats {
+  wins: number
+  losses: number
+  pointsFor: number
+  pointsAgainst: number
+}
+
+startNewBracket(teams: string[], type: BracketType): void
+describeNextMatch(): MatchInfo | null
+describeMatch(id: number): MatchInfo | null
+submitMatchScores(teamOneScore: number, teamTwoScore: number): void
+describeBracketStatus(): BracketStatus | null
+listTeams(): string[]
+getTeamStats(team: string): TeamStats

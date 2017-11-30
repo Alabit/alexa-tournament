@@ -1,0 +1,15 @@
+Teams {
+  name HASH
+}
+BracketMatches {
+  tempHash HASH // always has same value for now
+  id RANGE // is a standard number, with id 1 being the first match in the first round
+  status // BLOCKED (need other match to finish), PENDING (teams have been determined but scores are not ready), or COMPLETE (scores and result are in)
+  teamOnePath // is either a bracket match id, indicating that the team to play here should be the winner from that match, or a seed id if this is the first round of the bracket
+  teamTwoPath
+  teamOne
+  teamTwo
+  teamOneScore
+  teamTwoScore
+  winner // ONE or TWO
+}

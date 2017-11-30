@@ -1,0 +1,13 @@
+functionalities.
+  make a bracket (specify players, type, seeded, how many matches to run at a time, ...)
+  tell alexa the score of a match
+  ask alexa for a player's lifetime stats
+  ask alexa for the history of a given matchup
+  ask how many matches are left, or verify current matches, or query tournament status in general
+  have it generate a url with visual, ask alexa to slack you a link
+
+technical needs.
+  persistent data storage (both for current bracket and for long-term stats) - local to the specific user?
+  pipeline for how to get the text of a user request
+  put all the actual code in lambdas, invoke them from the alexa skill
+  pipeline to send the responses back
