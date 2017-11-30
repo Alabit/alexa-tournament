@@ -108,7 +108,7 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
           teamTwo: null as any
         }
         match.teamOne = buildBracket(teams.slice(0, pivot), {node: match, slot: "ONE"})
-        match.teamOne = buildBracket(teams.slice(0, pivot), {node: match, slot: "TWO"})
+        match.teamTwo = buildBracket(teams.slice(pivot), {node: match, slot: "TWO"})
         return match
       }
 
