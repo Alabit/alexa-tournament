@@ -1,5 +1,5 @@
 import {DynamoDB} from "aws-sdk"
-import * as t from "../types"
+import {Tables} from "../config"
 
 
 
@@ -10,6 +10,15 @@ import * as t from "../types"
 export async function listTeams(): Promise<string[]> {
   const db = new DynamoDB.DocumentClient()
 
-  // TODO
-  return ["fred", "bob"]
+  const res = await db.scan({
+    TableName: Tables.Teams
+  }).promise()
+
+  // TODO we need to handle pagination
+
+  if (!res.Items) {
+    throw new Error("Malformed response from database")
+  }
+
+  return res.Items.map((item) => item.name)
 }
