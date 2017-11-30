@@ -1,5 +1,5 @@
 import {DynamoDB} from "aws-sdk"
-import {Tables} from "../config"
+import {Tables, TmpHash} from "../config"
 import * as t from "../types"
 
 
@@ -148,7 +148,7 @@ async function createBracket(type: t.BracketType, teams: string[], db: DynamoDB.
             teamOne: string | null
             teamTwo: string | null
           } = {
-            tmpHash: "TMP",
+            tmpHash: TmpHash,
             id: node.id,
             status: "PENDING",
             teamOne: null,

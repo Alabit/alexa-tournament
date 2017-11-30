@@ -1,16 +1,20 @@
+import {describeMatch} from "./describeMatch"
+import {getNextMatchID} from "./getNextMatchID"
 import * as t from "../types"
 
 
 
-// returns null if there are no more matches or there is no active bracket
+/*
+  Finds the next pending match and returns its details.
+  Returns null if there is no pending match.
+*/
 export async function describeNextMatch(): Promise<t.MatchInfo | null> {
-  // TODO
-  return {
-    id: 1,
-    status: t.CompletionStatus.Incomplete,
-    teamOne: "bob",
-    teamTwo: "fred",
-    teamOneScore: 0,
-    teamTwoScore: 0
+  const nextMatchID = await getNextMatchID()
+
+  if (nextMatchID) {
+    // TODO this is actually inefficient; we only need to project the doc we already queried, but we are going to query it again for no reason
+    return await describeMatch(nextMatchID)
+  } else {
+    return null
   }
 }
