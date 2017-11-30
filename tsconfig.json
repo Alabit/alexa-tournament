@@ -10,6 +10,8 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
-    "target": "ES6"
+    "target": "ES6",
+    "rootDir": "./",
+    "outDir": ".build"
   }
 }

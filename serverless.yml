@@ -1,0 +1,17 @@
+service: bracketManager
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: prod
+  region: us-west-2
+  memorySize: 128
+  timeout: 30
+
+functions:
+  main:
+    name: bracketManager
+    handler: handler.main
+
+plugins:
+  - serverless-plugin-typescript

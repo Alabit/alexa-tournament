@@ -2,6 +2,12 @@
   "name": "alexa-tournament",
   "version": "0.0.0",
   "dependencies": {
+    "alexa-sdk": "^1.0.21",
     "aws-sdk": "^2.160.0"
+  },
+  "devDependencies": {
+    "@types/alexa-sdk": "^1.0.10",
+    "@types/node": "^8.0.53",
+    "serverless-plugin-typescript": "^1.1.3"
   }
 }
