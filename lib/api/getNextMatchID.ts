@@ -13,7 +13,10 @@ export async function getNextMatchID(): Promise<number | null> {
   const res = await db.query({
     TableName: Tables.BracketMatches,
     KeyConditionExpression: "tmpHash = :tmpHash",
-    FilterExpression: "matchStatus = :status",
+    FilterExpression: "#status = :status",
+    ExpressionAttributeNames: {
+      "#status": "status"
+    },
     ExpressionAttributeValues: {
       ":status": "PENDING",
       ":tmpHash": TmpHash
