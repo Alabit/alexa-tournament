@@ -60,9 +60,9 @@ async function clearTable(table: string, db: DynamoDB.DocumentClient, itemToKey:
 }
 
 async function createBracket(type: t.BracketType, db: DynamoDB.DocumentClient): Promise<void> {
-    let teams = await db.scan({
-      TableName: Tables.Teams
-    }).promise()
+  const teams = ((await db.scan({
+    TableName: Tables.Teams
+  }).promise()).Items || []).map((item) => item.name)
 
   if (teams.length === 0) {
     throw new Error("Unable to make a bracket with zero teams")
@@ -138,7 +138,7 @@ async function createBracket(type: t.BracketType, db: DynamoDB.DocumentClient): 
           const entry: {
             tmpHash: string
             id: number
-            matchStatus: "BLOCKED" | "PENDING"
+            status: "BLOCKED" | "PENDING"
             winnerAdvancesTo?: {
               match: number
               slot: "ONE" | "TWO"
@@ -152,18 +152,18 @@ async function createBracket(type: t.BracketType, db: DynamoDB.DocumentClient): 
           } = {
             tmpHash: TmpHash,
             id: node.id,
-            matchStatus: "PENDING",
+            status: "PENDING",
             teamOne: null,
             teamTwo: null
           }
 
           if (node.teamOne.type === "MATCH") {
-            entry.matchStatus = "BLOCKED"
+            entry.status = "BLOCKED"
           } else {
             entry.teamOne = node.teamOne.team
           }
           if (node.teamTwo.type === "MATCH") {
-            entry.matchStatus = "BLOCKED"
+            entry.status = "BLOCKED"
           } else {
             entry.teamTwo = node.teamTwo.team
           }

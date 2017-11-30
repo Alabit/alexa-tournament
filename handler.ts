@@ -1,5 +1,5 @@
 import * as Alexa from 'alexa-sdk'
-// import './lib/api/describeMatch'
+import {describeMatch as descMatch} from './lib/api/describeMatch'
 // import './lib/api/describeBracketStatus'
 // import './lib/api/describeNextMatch'
 // import './lib/api/getTeamStats'
@@ -61,9 +61,28 @@ const alexaHandlers = {
     this.response.speak('All Teams Removed')
     this.emit(':responseReady')
   },
-  'describeMatch': function () {
-    const tmp_msg = 'we would describe a match if we worked.'
-    this.response.speak(tmp_msg)
+  'describeMatch': async function () {
+
+    let matchNumber = this.event.request.intent.slots.matchNumber.value
+
+    let res = await descMatch(matchNumber)
+
+    let message = ''
+
+    if (res.status == types.CompletionStatus.Incomplete) {
+        message = 'Round ' + String(matchNumber) + 'is still Pendind and is between ' + res.teamOne + ' and ' + res.teamTwo
+    } else {
+      let winner = ''
+      let winnerNum = await calcWinner(res.teamOneScore, res.teamTwoScore)
+      if (winnerNum == 1) {
+        winner = res.teamOne
+      } else {
+        winner = res.teamTwo
+      }
+      message = 'Round ' + String(matchNumber) + 'has finished, the teams were ' + res.teamOne + ' and ' + res.teamTwo + ' with the winner being ' + winner
+    }
+
+    this.response.speak(message)
     this.emit(':responseReady')
   },
   'describeNextMatch': function () {
@@ -117,4 +136,13 @@ async function generateTeamName(numOfTeams: int) {
     teamArray.push('team-' + String(i+1))
   }
   return teamArray
+}
+
+
+async function calcWinner(teamOneScore: number, teamTwoScore: number) {
+  if (teamOneScore > teamTwoScore) {
+    return 1
+  } else {
+    return 2
+  }
 }
