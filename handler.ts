@@ -5,6 +5,9 @@ import * as Alexa from 'alexa-sdk'
 // import './lib/api/getTeamStats'
 // import './lib/api/listTeams'
 import {startNewBracket as startBracket} from './lib/api/startNewBracket'
+import {removeAllTeams as removeAllTeams} from './lib/api/removeAllTeams'
+import {addTeam as addTeam} from './lib/api/addTeam'
+import {removeTeam as removeTeam} from './lib/api/removeTeam'
 import {submitMatchScores as submitScores} from './lib/api/submitMatchScores'
 import * as types from "./lib/types"
 
@@ -25,27 +28,37 @@ export async function main(event: any, context: any, callback: any) {
 
 
 const alexaHandlers = {
+  let tournamentTypeMap = {
+    "single": types.BracketType.SingleElimination
+  }
   'LaunchRequest': function () {
     this.emit('startNewBracket')
   },
   'startNewBracket': async function () {
-    const resp = 'New bracket has been created.'
-
-    console.log(this.event.request.intent.slots)
-
-    let teams: string[] = await generateTeamName(this.event.request.intent.slots.numOfTeams.value)
-    let bracketType: string = this.event.request.intent.slots.bracketType.value
-
-    console.log('teams: ', teams)
-    console.log('bracket type: ', bracketType)
-
-    await startBracket(teams, types.BracketType.SingleElimination)
-    this.response.speak(resp)
+    await startBracket(tournamentTypeMap[this.event.request.intent.slots.bracketType.value])
+    this.response.speak('New bracket has been created.')
     this.emit(':responseReady')
   },
   'describeBracketStatus': function () {
     const tmp_msg = 'we would describe a bracket if we worked.'
     this.response.speak(tmp_msg)
+    this.emit(':responseReady')
+  },
+  'addTeam': async function () {
+    let teamName = this.event.request.intent.slots.teamName.value
+    await addTeam(teamName)
+    this.response.speak('Team '+teamName+' added')
+    this.emit(':responseReady')
+  },
+  'removeTeam': async function () {
+    let teamName = this.event.request.intent.slots.teamName.value
+    await removeTeam(teamName)
+    this.response.speak('Team '+teamName+' removed')
+    this.emit(':responseReady')
+  },
+  'removeAllTeams': async function () {
+
+    this.response.speak('All Teams Removed')
     this.emit(':responseReady')
   },
   'describeMatch': function () {
